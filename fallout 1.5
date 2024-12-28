@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8;
+
+interface Fallout {
+    function Fal1out() external payable; 
+    // made a function called fallout that is payable because the owner is set as message.sender and by sending transactions, i can take hold of the contract 
+
+    function owner() external view returns (address); 
+//  the owner function serves to confirm the address of the owner and its just a view function
+}
