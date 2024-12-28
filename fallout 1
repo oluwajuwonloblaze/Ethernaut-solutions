@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0; 
+// The Version 0.6 is an old solidity version so expect some little changes. Solidity also keeps throwing errors i guess its because of the solidity version.
+
+import "openzeppelin-contracts-06/math/SafeMath.sol";
+// That is a security framework kinda 
+// To complete this level, i need to claim ownership of the smart contract 
+
+contract Fallout {
+    using SafeMath for uint256;
+    // while researching i found out that safe math for uint is a quite old convention i guess thats due to the solidity version
+
+    mapping(address => uint256) allocations;
+    address payable public owner;
+
+    /* constructor */
+    function Fal1out() public payable {
+        owner = msg.sender;
+        allocations[owner] = msg.value;
+    }
+    // Who creates constructors this way? constructors getting named identical to contracts ended with the v0.4
+// Mistakes also in the constructor name should be fallout not fal1out so the constructor acts as a function
+// Anyone that can call the constructor becomes the owner. Was made as a public function instead of constructor
+    modifier onlyOwner() {
+        require(msg.sender == owner, "caller is not the owner");
+        _;
+    }
+
+    function allocate() public payable {
+        allocations[msg.sender] = allocations[msg.sender].add(msg.value);
+    }
+
+    function sendAllocation(address payable allocator) public {
+        require(allocations[allocator] > 0);
+        allocator.transfer(allocations[allocator]);
+    }
+
+    function collectAllocations() public onlyOwner {
+        msg.sender.transfer(address(this).balance);
+    }
+
+    function allocatorBalance(address allocator) public view returns (uint256) {
+        return allocations[allocator];
+    }
+}
